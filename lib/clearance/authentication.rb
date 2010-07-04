@@ -87,7 +87,12 @@ module Clearance
       def deny_access(flash_message = nil)
         store_location
         flash[:failure] = flash_message if flash_message
-        redirect_to(sign_in_url)
+        if self.current_user
+          # Difficult to access normal session variables from inside Clearance (request.env["HTTP_REFERER"])
+          @_request.env["HTTP_REFERER"] ? redirect_to(@_request.env["HTTP_REFERER"]) : redirect_to(root_path)
+        else
+          redirect_to(sign_in_url)
+        end
       end
 
       protected
