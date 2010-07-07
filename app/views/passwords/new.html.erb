@@ -1,15 +1,16 @@
-<h2>Change your password</h2>
+<h2><%= t(:change_password).capitalize %></h2>
 
 <p>
-  We will email you a link to change your password.
+  <%= t(:email_link).capitalize %>
 </p>
 
 <% form_for :password, :url => passwords_path do |form| %>
   <div class="text_field">
-    <%= form.label :email, "Email address" %>
+    <%= form.label :email, t(:email).capitalize %>
     <%= form.text_field :email %>
   </div>
+  <div class="clear pt-2x"></div>
   <div class="submit_field">
-    <%= form.submit "Reset password", :disable_with => "Please wait..." %>
+    <%= form.submit t(:reset_password).capitalize, :disable_with => t(:please_wait).capitalize %>
   </div>
 <% end %>

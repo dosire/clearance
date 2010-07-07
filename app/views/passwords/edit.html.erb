@@ -1,7 +1,7 @@
-<h2>Change your password</h2>
+<h2><%= t(:change_password).capitalize %></h2>
 
 <p>
-  Your password has been reset. Choose a new password below.
+  <%= t(:password_reset) %>
 </p>
 
 <%= error_messages_for :user %>
@@ -10,14 +10,14 @@
             :url => user_password_path(@user, :token => @user.confirmation_token),
             :html => { :method => :put }) do |form| %>
   <div class="password_field">
-    <%= form.label :password, "Choose password" %>
+    <%= form.label :password, t(:choose_password).capitalize %>
     <%= form.password_field :password %>
   </div>
   <div class="password_field">
-    <%= form.label :password_confirmation, "Confirm password" %>
+    <%= form.label :password_confirmation, t(:confirm_password).capitalize %>
     <%= form.password_field :password_confirmation %>
   </div>
   <div class="submit_field">
-    <%= form.submit "Save this password", :disable_with => "Please wait..." %>
+    <%= form.submit t(:save_password).capitalize, :disable_with => t(:please_wait).capitalize %>
   </div>
 <% end %>
