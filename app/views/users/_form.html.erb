@@ -1,13 +1,13 @@
 <%= form.error_messages %>
 <div class="text_field">
-  <%= form.label :email %>
+  <%= form.label :email, t(:email).capitalize %>
   <%= form.text_field :email %>
 </div>
 <div class="password_field">
-  <%= form.label :password %>
+  <%= form.label :password, t(:password).capitalize %>
   <%= form.password_field :password %>
 </div>
 <div class="password_field">
-  <%= form.label :password_confirmation, "Confirm password" %>
+  <%= form.label :password_confirmation, t(:confirm_password).capitalize %>
   <%= form.password_field :password_confirmation %>
 </div>

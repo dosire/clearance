@@ -1,6 +1,6 @@
-<h2>Sign up</h2>
+<h2><%= t(:sign_up).capitalize %></h2>
 
 <% form_for @user do |form| %>
-  <%= render :partial => '/users/form', :object => form %>
-  <%= form.submit 'Sign up', :disable_with => 'Please wait...' %>
+  <%= render :partial => '/vendor/gems/clearance-0.8.8/app/views/users/form', :object => form %>
+  <%= form.submit t(:sign_up).capitalize, :disable_with => t(:please_wait).capitalize %>
 <% end %>
