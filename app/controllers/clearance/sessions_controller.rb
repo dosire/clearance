@@ -37,13 +37,13 @@ class Clearance::SessionsController < ApplicationController
   private
 
   def flash_failure_after_create
-    flash.now[:failure] = translate(:bad_email_or_password,
+    flash.now[:error] = translate(:bad_email_or_password,
       :scope   => [:clearance, :controllers, :sessions],
       :default => "Bad email or password.")
   end
 
   def flash_success_after_create
-    flash[:success] = translate(:signed_in, :default =>  "Signed in.")
+    flash[:notice] = translate(:signed_in, :default =>  "Signed in.")
   end
 
   def flash_notice_after_create
@@ -58,7 +58,7 @@ class Clearance::SessionsController < ApplicationController
   end
 
   def flash_success_after_destroy
-    flash[:success] = translate(:signed_out, :default =>  "Signed out.")
+    flash[:notice] = translate(:signed_out, :default =>  "Signed out.")
   end
 
   def url_after_destroy
