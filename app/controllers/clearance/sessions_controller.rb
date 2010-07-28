@@ -54,7 +54,13 @@ class Clearance::SessionsController < ApplicationController
   end
 
   def url_after_create
-    '/'
+    if current_user.manager?
+      manager_path(current_user)
+    elsif current_user.supplier?
+      supplier_path(current_user)
+    elsif current_user.customer?
+      customer_path(current_user)
+    end
   end
 
   def flash_success_after_destroy
