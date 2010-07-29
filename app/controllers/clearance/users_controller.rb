@@ -1,7 +1,7 @@
 class Clearance::UsersController < ApplicationController
   unloadable
 
-  before_filter :authenticate
+  before_filter :authenticate, :except => :switch_locale
   filter_parameter_logging :password
 
   def new
