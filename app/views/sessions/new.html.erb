@@ -1,12 +1,12 @@
-<h2>Fairsatile - <%= t(:sign_in).capitalize %></h2>
+<h2>Fairsatile - <%= t(:sign_in_nu).capitalize %></h2>
 
 <body class="login">
   <div id="login-page-wrapper">
     <div id="login-form-wrapper">
-    
+
       <% form_for (:session, :url => session_path, :id => "login-form") do |form| %>
         <div class="form-wrapper" id="login-wrapper">
-          
+
           <p class="w-30p ta-left">
             <%= form.label :email, t(:email).capitalize, :class => "blue bold" %>
           </p>
@@ -14,7 +14,7 @@
             <%= form.text_field :email, :class => "text-box" %>
           </p>
           <div class="clear pt-2x"></div>
-          
+
           <p class="w-30p ta-left">
             <%= form.label :password, t(:password).capitalize, :class => "blue bold" %>
           </p>
@@ -22,7 +22,7 @@
             <%= form.password_field :password, :class => "text-box" %>
           </p>
           <div class="clear pt-2x"></div>
-          
+
           <p class="w-30p ta-left"></p>
           <p class="w-60p ta-left">
             <%= form.submit(t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "blue-button") %>
@@ -33,7 +33,7 @@
       <div class="space-2x"></div>
       <ul>
         <li>
-          <%# link_to t(:sign_up).capitalize, sign_up_path %>
+          <%# link_to t(:sign_up_nu).capitalize, sign_up_path %>
         </li>
         <li>
           <%= link_to t(:forgot_password), new_password_path %>
@@ -43,3 +43,4 @@
     </div>
   </div>
 </body>
+
