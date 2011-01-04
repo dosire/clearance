@@ -59,7 +59,7 @@ class Clearance::SessionsController < ApplicationController
     elsif current_user.supplier?
       supplier_path(current_user)
     elsif current_user.customer?
-      customer_path(current_user)
+      webshops_path
     end
   end
 
@@ -71,3 +71,4 @@ class Clearance::SessionsController < ApplicationController
     '/'
   end
 end
+
