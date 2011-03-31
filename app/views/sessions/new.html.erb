@@ -1,46 +1,20 @@
-<h2>Fairsatile - <%= t(:sign_in_nu).capitalize %></h2>
+<% content_for :title, t(:sign_in_nu).capitalize %>
 
-<body class="login">
-  <div id="login-page-wrapper">
-    <div id="login-form-wrapper">
-
-      <% form_for (:session, :url => session_path, :id => "login-form") do |form| %>
-        <div class="form-wrapper" id="login-wrapper">
-
-          <p class="w-30p ta-left">
-            <%= form.label :email, t(:email).capitalize, :class => "blue bold" %>
-          </p>
-          <p class="w-60p ta-left">
-            <%= form.text_field :email, :class => "text-box" %>
-          </p>
-          <div class="clear pt-2x"></div>
-
-          <p class="w-30p ta-left">
-            <%= form.label :password, t(:password).capitalize, :class => "blue bold" %>
-          </p>
-          <p class="w-60p ta-left">
-            <%= form.password_field :password, :class => "text-box" %>
-          </p>
-          <div class="clear pt-2x"></div>
-
-          <p class="w-30p ta-left"></p>
-          <p class="w-60p ta-left">
-            <%= form.submit(t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "blue-button") %>
-          </p>
-          <div class="clear pt-2x"></div>
-        </div>
-      <% end %>
-      <div class="space-2x"></div>
-      <ul>
-        <li>
-          <%# link_to t(:sign_up_nu).capitalize, sign_up_path %>
-        </li>
-        <li>
-          <%= link_to t(:forgot_password), new_password_path %>
-        </li>
-      </ul>
-      <div class="space-2x"></div>
-    </div>
-  </div>
-</body>
+<div id="admin_wrapper">
+  <% form_for (:session, :url => session_path) do |form| %>
+    <p>
+      <%= form.label :email, t(:email).capitalize %>
+      <%= form.text_field :email, :class => "medium" %>
+    </p>
+    <p>
+      <%= form.label :password, t(:password).capitalize %>
+      <%= form.password_field :password, :class => "medium" %>
+    </p>
+    <br />
+    <%= form.submit(t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "button") %>
+  <% end %>
+  <br />
+  <%# link_to t(:sign_up_nu).capitalize, sign_up_path %>
+  <%= link_to t(:forgot_password), new_password_path %>
+</div>
 
