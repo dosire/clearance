@@ -55,7 +55,7 @@ class Clearance::SessionsController < ApplicationController
 
   def url_after_create
     if current_user.manager?
-      manager_path(current_user)
+      manager_url(current_user, :subdomain => current_user.subdomain)
     elsif current_user.supplier?
       supplier_path(current_user)
     elsif current_user.customer?
