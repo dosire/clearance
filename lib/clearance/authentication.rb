@@ -64,7 +64,8 @@ module Clearance
         if user
           cookies[:remember_token] = {
             :value   => user.remember_token,
-            :expires => 1.year.from_now.utc
+            :expires => 1.year.from_now.utc,
+            :domain => ".#{request.domain}"
           }
           self.current_user = user
         end
