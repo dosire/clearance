@@ -14,7 +14,7 @@
     <%= form.submit(t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "button") %>
   <% end %>
   <br />
-  <%# link_to t(:sign_up_nu).capitalize, sign_up_path %>
+  <%= link_to t(:sign_up_nu).capitalize, sign_up_path %><br />
   <%= link_to t(:forgot_password), new_password_path %>
 </div>
 

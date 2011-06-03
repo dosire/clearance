@@ -60,6 +60,8 @@ class Clearance::SessionsController < ApplicationController
       supplier_path(current_user)
     elsif current_user.customer?
       webshops_path
+    else
+      root_path
     end
   end
 
