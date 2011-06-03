@@ -70,7 +70,7 @@ class Clearance::SessionsController < ApplicationController
   end
 
   def url_after_destroy
-    '/'
+    new_session_path(:subdomain => "www")
   end
 end
 
