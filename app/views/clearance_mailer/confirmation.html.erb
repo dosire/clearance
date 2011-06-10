@@ -1,5 +1,10 @@
-
-<%= new_user_confirmation_url(
-      :user_id => @user,
-      :token   => @user.confirmation_token,
-      :encode  => false) %>
+<% n = new_user_confirmation_url(
+  :user_id => @user,
+  :token   => @user.confirmation_token,
+  :encode  => false) 
+-%>
+<% if RAILS_ENV.index('development') -%>
+  <% raise "The current subdomain is: \n#{request.inspect}\nand the generated email is: \n#{n}" %>
+<% else -%>
+  <%= n %>
+<% end -%>
