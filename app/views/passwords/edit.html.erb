@@ -1,8 +1,8 @@
-<h2><%= t(:change_password).capitalize %></h2>
-
-<p>
+<% content_for :title, t(:change_password).capitalize %>
+<br />
+<div class="information canhide">
   <%= t(:password_reset) %>
-</p>
+</div>
 
 <%= error_messages_for :user %>
 
