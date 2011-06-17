@@ -5,7 +5,7 @@
   :subdomain => @user.subdomain_on_signup
   ) 
 -%>
-<% if RAILS_ENV.index('development') -%>
+<% if false #RAILS_ENV.index('development') -%>
   <% raise "The generated email is: \n#{n}" %>
 <% else -%>
   <%= n %>
