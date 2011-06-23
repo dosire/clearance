@@ -135,6 +135,10 @@ module Clearance
         end
         save
       end
+      
+      def generate_confirmation_token
+        self.confirmation_token = encrypt("--#{Time.now.utc}--#{password}--#{rand}--")
+      end
 
       protected
 
@@ -155,10 +159,6 @@ module Clearance
 
       def encrypt(string)
         generate_hash("--#{salt}--#{string}--")
-      end
-
-      def generate_confirmation_token
-        self.confirmation_token = encrypt("--#{Time.now.utc}--#{password}--#{rand}--")
       end
 
       def generate_remember_token

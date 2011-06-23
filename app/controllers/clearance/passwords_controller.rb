@@ -31,10 +31,10 @@ class Clearance::PasswordsController < ApplicationController
   def update
     @user = ::User.find_by_id_and_confirmation_token(
                    params[:user_id], params[:token])
-
-    if @user.update_password(params[:user][:password],
-                             params[:user][:password_confirmation])
-      @user.confirm_email!
+    if @user.update_password(params[:user][:password], params[:user][:password_confirmation])
+      @user.generate_confirmation_token # Because this was reset by update_password
+      @user.save
+      @user.update_attribute(:email_confirmed, true) # @user.confirm_email! will reset the confirmation token
       sign_in(@user)
       flash_success_after_update
       redirect_to(url_after_update)
