@@ -47,6 +47,7 @@ class Clearance::PasswordsController < ApplicationController
 
   def forbid_missing_token
     if params[:token].blank?
+      # TODO more user friendly error message.
       raise ActionController::Forbidden, "missing token"
     end
   end
@@ -66,7 +67,7 @@ class Clearance::PasswordsController < ApplicationController
   end
 
   def flash_failure_after_create
-    flash.now[:failure] = translate(:unknown_email,
+    flash.now[:error] = translate(:unknown_email,
       :scope   => [:clearance, :controllers, :passwords],
       :default => "Unknown email.")
   end
@@ -76,7 +77,7 @@ class Clearance::PasswordsController < ApplicationController
   end
 
   def flash_success_after_update
-    flash[:success] = translate(:signed_in, :default => "Signed in.")
+    flash[:notice] = translate(:password_reset_success, :default => "Your password has been reset.")
   end
 
   def url_after_update
