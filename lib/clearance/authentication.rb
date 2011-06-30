@@ -85,9 +85,9 @@ module Clearance
       # Display a failure flash message if included.
       #
       # @param [String] optional flash message to display to denied user
-      def deny_access(flash_message = nil)
+      def deny_access(flash_message = t(:access_denied).capitalize)
         store_location
-        flash[:failure] = flash_message if flash_message
+        flash[:error] = flash_message if flash_message
         if self.current_user
           # Difficult to access normal session variables from inside Clearance (request.env["HTTP_REFERER"])
           @_request.env["HTTP_REFERER"] ? redirect_to(@_request.env["HTTP_REFERER"]) : redirect_to(root_path)
