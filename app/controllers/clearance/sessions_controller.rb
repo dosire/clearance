@@ -19,7 +19,7 @@ class Clearance::SessionsController < ApplicationController
       if @user.email_confirmed?
         sign_in(@user)
         flash_success_after_create
-        redirect_back_or(url_after_create)
+        redirect_back_or(url_after_login(@user))
       else
         ::ClearanceMailer.deliver_confirmation(@user)
         flash_notice_after_create
@@ -32,7 +32,7 @@ class Clearance::SessionsController < ApplicationController
     sign_out
     flash_success_after_destroy
     redirect_to(url_after_destroy)
-  end
+  end  
 
   private
 
@@ -51,18 +51,6 @@ class Clearance::SessionsController < ApplicationController
       :scope   => [:clearance, :controllers, :sessions],
       :default => "User has not confirmed email. " <<
                   "Confirmation email will be resent.")
-  end
-
-  def url_after_create
-    if current_user.manager?
-      manager_url(current_user, :subdomain => current_user.subdomain)
-    elsif current_user.supplier?
-      supplier_path(current_user)
-    elsif current_user.customer?
-      webshops_path
-    else
-      root_path
-    end
   end
 
   def flash_success_after_destroy

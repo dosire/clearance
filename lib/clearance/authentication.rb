@@ -115,7 +115,7 @@ module Clearance
         end
       end
 
-      def redirect_back_or(default)
+      def redirect_back_or(default="/")
         redirect_to(return_to || default)
         clear_return_to
       end
