@@ -1,5 +1,4 @@
-<% content_for :title, t(:sign_in_nu).capitalize %>
-
+<% content_for :title, t(:sign_in_nu).capitalize %>  
 <div id="admin_wrapper">
   <% form_for (:session, :url => session_path) do |form| %>
     <%= form.label :email, t(:email).capitalize %>
@@ -8,6 +7,7 @@
     <%= form.label :password, t(:password).capitalize %>
     <%= form.password_field :password, :class => "medium" %><br>
     
+
     <%= form.submit(t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "button") %>
   <% end %>
   <br />
