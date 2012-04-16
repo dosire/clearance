@@ -1,6 +1,6 @@
 <% content_for :title, t(:sign_in_nu).capitalize %>  
 <div id="admin_wrapper">
-  <% form_for (:session, :url => session_path) do |form| %>
+  <% form_for(:session, :url => session_path) do |form| %>
     <%= form.label :email, t(:email).capitalize %>
     <%= form.text_field :email, :class => "medium" %><br>
       
