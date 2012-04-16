@@ -2,7 +2,7 @@ Clearance
 =========
 
 Rails authentication with email & password.
-
+ 
 [We have clearance, Clarence.](http://www.youtube.com/v/mNRXJEE3Nz8)
 
 Help
