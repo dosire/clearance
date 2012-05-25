@@ -167,8 +167,7 @@ module Clearance
 # =======
     protected
 
-    def generate_random_code(le>>>>>>> original/master
-ngth = 20)
+    def generate_random_code(length = 20)
       if RUBY_VERSION >= '1.9'
         SecureRandom.hex(length).encode('UTF-8')
       else
