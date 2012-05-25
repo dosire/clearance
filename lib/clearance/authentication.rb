@@ -64,8 +64,8 @@ module Clearance
         if user
           cookies[:remember_token] = {
             :value   => user.remember_token,
-            :expires => 1.year.from_now.utc,
             :domain => ".#{request.domain}"
+            :expires => Clearance.configuration.cookie_expiration.call
           }
           self.current_user = user
         end
@@ -111,7 +111,7 @@ module Clearance
 
       def store_location
         if request.get?
-          session[:return_to] = request.request_uri
+          session[:return_to] = request.fullpath
         end
       end
 

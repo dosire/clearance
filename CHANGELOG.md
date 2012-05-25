@@ -1,7 +1,9 @@
 0.8.9 (unreleased)
 ------------------
 
-* Removed unnecessary db index. (Rich Thorne, doctorzaius)
+* Removed unnecessary db index. (Rich Thornett, doctorzaius)
+* [#79] Allow customization of cookie duration. (Ron Newman, Dan Croak)
+* [#77] rake generator:cleanup needed to be... cleaned up. (Ron Newman)
 
 0.8.8 (02/25/2010)
 ------------------

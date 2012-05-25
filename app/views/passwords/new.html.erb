@@ -4,7 +4,7 @@
   <%= t(:email_link).capitalize %>
 </p>
 
-<% form_for :password, :url => passwords_path do |form| %>
+<%= form_for :password, :url => passwords_path do |form| %>
   <div class="text_field">
     <%= form.label :email, t(:email).capitalize %>
     <%= form.text_field :email %>

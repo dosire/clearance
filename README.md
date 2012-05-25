@@ -2,8 +2,8 @@ Clearance
 =========
 
 Rails authentication with email & password.
- 
-[We have clearance, Clarence.](http://www.youtube.com/v/mNRXJEE3Nz8)
+
+[We have clearance, Clarence.](http://www.youtube.com/watch?v=fVq4_HhBK8Y)
 
 Help
 ----
@@ -20,7 +20,7 @@ Fork away and create a [Github Issue](http://github.com/thoughtbot/clearance/iss
 Installation
 ------------
 
-Clearance is a Rails engine. It works with versions of Rails greater than 2.3.
+Clearance is a Rails engine. The latest stable version works with versions of Rails greater than 3.  If you need to run on Rails 2.x, install Clearance Version 0.8.8.
 
 Install it as a gem however you like to install gems. Also, uninstall old versions:
 
@@ -30,15 +30,13 @@ Install it as a gem however you like to install gems. Also, uninstall old versio
 
 Make sure the development database exists, then run the generator:
 
-    script/generate clearance
+    script/rails generate clearance
 
 This:
 
 * inserts Clearance::User into your User model
 * inserts Clearance::Authentication into your ApplicationController
-* inserts Clearance::Routes.draw(map) into your config.routes.rb
 * created a migration that either creates a users table or adds only missing columns
-* prints further instructions
 
 Usage
 -----
@@ -67,11 +65,11 @@ To change any of provided actions, subclass a Clearance controller...
       end
     end
 
-and add your route above (before) Clearance routes in config/routes.rb:
+and add your route in config/routes.rb:
 
-    map.resource :session, :controller => 'sessions'
+    resource :session, :controller => 'sessions'
 
-See lib/clearance/routes.rb for all the routes Clearance provides.
+See config/routes.rb for all the routes Clearance provides.
 
 Actions that redirect (create, update, and destroy) in Clearance controllers
 can be overriden by re-defining url_after_(action) methods as seen above.
@@ -85,33 +83,27 @@ opinion is that you should test its integration with your app using
 
 Run the Cucumber generator and Clearance feature generator:
 
-    script/generate cucumber
-    script/generate clearance_features
+    script/rails generate cucumber
+    script/rails generate clearance_features
 
-All of the files generated should be new with the exception of the
-features/support/paths.rb file. If you have not modified your paths.rb then you
-will be okay to replace it with this one. If you need to keep your paths.rb
-file then add these locations in your paths.rb manually:
+Edit your Gemfile to include:
 
-  def path_to(page_name)
-    case page_name
-    when /the sign up page/i
-     new_user_path
-    when /the sign in page/i
-     new_session_path
-    when /the password reset request page/i
-     new_password_path
-    end
-  end
+    gem 'factory_girl'
+
+Edit your config/enviroments/cucumber.rb to include the following:
+
+    ActionMailer::Base.default_url_options = { :host => 'localhost:3000' }
+
+Then run rake!
 
 Optional Formtastic views
 -------------------------
 
-We use & recommend [Formtastic](http://github.com/justinfrench/formtastic].
+We use & recommend [Formtastic](http://github.com/justinfrench/formtastic).
 
 Clearance has another generator to generate Formastic views:
 
-    script/generate clearance_views
+    script/rails generate clearance_views
 
 Its implementation is designed so other view styles (Haml?) can be generated.
 
@@ -128,4 +120,5 @@ Dan Croak, Mike Burns, Jason Morrison, Joe Ferris, Eugene Bolshakov,
 Nick Quaranto, Josh Nichols, Mike Breen, Marcel Görner, Bence Nagy, Ben Mabey,
 Eloy Duran, Tim Pope, Mihai Anca, Mark Cornick, Shay Arnett, Joshua Clayton,
 Mustafa Ekim, Jon Yurek, Anuj Dutta, Chad Pytel, Ben Orenstein, Bobby Wilson,
-Matthew Ford, Ryan McGeary, Claudio Poli, Joseph Holsten, and Peter Haza.
+Matthew Ford, Ryan McGeary, Claudio Poli, Joseph Holsten, Peter Haza,
+Ron Newman, and Rich Thornett.

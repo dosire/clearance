@@ -1,14 +1,17 @@
 <% content_for :title, t(:sign_in_nu).capitalize %>  
 <div id="admin_wrapper">
-  <% form_for(:session, :url => session_path) do |form| %>
-    <%= form.label :email, t(:email).capitalize %>
-    <%= form.text_field :email, :class => "medium" %><br>
-      
-    <%= form.label :password, t(:password).capitalize %>
-    <%= form.password_field :password, :class => "medium" %><br>
-    
-
-    <%= form.submit(t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "button") %>
+  <%= form_for :session, :url => session_path do |form| %>
+    <div class="text_field">
+      <%= form.label :email %>
+      <%= form.text_field :email %>
+    </div>
+    <div class="text_field">
+      <%= form.label :password %>
+      <%= form.password_field :password %>
+    </div>
+    <div class="submit_field">
+      <%= form.submit t(:ok).capitalize, :disable_with => t(:please_wait).capitalize, :class => "button" %>
+    </div>
   <% end %>
   <br />
   <%= link_to t(:sign_up_nu).capitalize, sign_up_path %><br />
