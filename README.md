@@ -1,124 +1,301 @@
-Clearance
+Clearance [![Build Status](https://secure.travis-ci.org/thoughtbot/clearance.png)](http://travis-ci.org/thoughtbot/clearance?branch=master)
 =========
 
-Rails authentication with email & password.
+Rails authentication & authorization with email & password.
 
 [We have clearance, Clarence.](http://www.youtube.com/watch?v=fVq4_HhBK8Y)
+
+Clearance was extracted out of [Airbrake](http://airbrakeapp.com/).
 
 Help
 ----
 
-* [documentation](http://rdoc.info/projects/thoughtbot/clearance)
-* [#thoughtbot](irc://irc.freenode.net/thoughtbot) IRC channel on freenode
-* [mailing list](http://groups.google.com/group/thoughtbot-clearance)
-
-Bugs, Patches
--------------
-
-Fork away and create a [Github Issue](http://github.com/thoughtbot/clearance/issues).
+* [Documentation](http://rdoc.info/gems/clearance) at RDoc.info.
+* [Patches and bugs](http://github.com/thoughtbot/clearance/issues) at Github Issues.
+* [Mailing list](http://groups.google.com/group/thoughtbot-clearance) at Google Groups.
 
 Installation
 ------------
 
-Clearance is a Rails engine. The latest stable version works with versions of Rails greater than 3.  If you need to run on Rails 2.x, install Clearance Version 0.8.8.
+Clearance is a Rails engine for Rails 3. It is currently tested against Rails 3.0.12 and Rails 3.1.4.
 
-Install it as a gem however you like to install gems. Also, uninstall old versions:
+Include the gem in your Gemfile:
 
-    sudo gem uninstall thoughtbot-clearance
-    sudo gem uninstall clearance
-    sudo gem install clearance
+    gem "clearance"
 
 Make sure the development database exists, then run the generator:
 
-    script/rails generate clearance
+    rails generate clearance:install
 
 This:
 
 * inserts Clearance::User into your User model
 * inserts Clearance::Authentication into your ApplicationController
-* created a migration that either creates a users table or adds only missing columns
+* creates a migration that either creates a users table or adds only missing columns
+
+Follow the instructions that are output from the generator.
+
+Use the [0.8.x](https://github.com/thoughtbot/clearance/tree/v0.8.8)
+series of Clearance if you have a Rails 2 app.
 
 Usage
 -----
 
-If you want to authenticate users for a controller action, use the authenticate
+If you want to authorize users for a controller action, use the authorize
 method in a before_filter.
 
     class WidgetsController < ApplicationController
-      before_filter :authenticate
+      before_filter :authorize
+
       def index
         @widgets = Widget.all
       end
     end
 
-Customizing
------------
+If you want to reference the current user in a controller, view, or helper, use
+the current_user method.
 
-To change any of provided actions, subclass a Clearance controller...
+    def index
+      current_user.articles
+    end
+
+If you want to know whether the current user is signed in or out, you can use
+these methods in controllers, views, or helpers:
+
+    signed_in?
+    signed_out?
+
+Typically, you want to have something like this in your app, maybe in a layout:
+
+    <% if signed_in? %>
+      <%= current_user.email %>
+      <%= link_to "Sign out", sign_out_path, :method => :delete %>
+    <% else %>
+      <%= link_to "Sign in", sign_in_path %>
+    <% end %>
+
+If you ever want to authenticate the user some place other than sessions/new,
+maybe in an API:
+
+    User.authenticate("email@example.com", "password")
+
+Clearance will deliver one email on your app's behalf: when a user resets their password. Therefore, you should change the default email address that email comes from:
+
+    # config/initializers/clearance.rb
+    Clearance.configure do |config|
+      config.mailer_sender = "me@example.com"
+    end
+
+Rack
+----
+
+Clearance adds its session to the Rack environment hash so middleware and other
+Rack applications can interact with it:
+
+    class Bubblegum::Middleware
+      def initialize(app)
+        @app = app
+      end
+
+      def call(env)
+        if env[:clearance].signed_in?
+          env[:clearance].current_user.bubble_gum
+        end
+        @app.call(env)
+      end
+    end
+
+
+Overriding defaults
+-------------------
+
+Clearance is intended to be small, simple, well-tested, and easy to override defaults.
+
+Overriding routes
+-----------------
+
+See [config/routes.rb](https://github.com/thoughtbot/clearance/blob/master/config/routes.rb) for the default behavior.
+
+To override a Clearance route, redefine it:
+
+    resource :session, :controller => 'sessions'
+
+Overriding controllers
+----------------------
+
+See [app/controllers/clearance](https://github.com/thoughtbot/clearance/tree/master/app/controllers/clearance) for the default behavior.
+
+To override a Clearance controller, subclass it:
 
     class SessionsController < Clearance::SessionsController
       def new
         # my special new action
       end
+
       def url_after_create
         my_special_path
       end
     end
 
-and add your route in config/routes.rb:
+You may want to override entire actions:
 
-    resource :session, :controller => 'sessions'
+    def new
+    end
 
-See config/routes.rb for all the routes Clearance provides.
+Or, you may want to override private methods that actions use:
 
-Actions that redirect (create, update, and destroy) in Clearance controllers
-can be overriden by re-defining url_after_(action) methods as seen above.
+    url_after_create
+    url_after_update
+    url_after_destroy
+    flash_failure_after_create
+    flash_failure_after_update
+    flash_failure_when_forbidden
+    forbid_missing_token
+    forbid_non_existent_user
+
+Overriding translations
+-----------------------
+
+All flash messages and email subject lines are stored in [i18n translations](http://guides.rubyonrails.org/i18n.html). Override them like any other translation.
+
+Overriding views
+----------------
+
+See [app/views](https://github.com/thoughtbot/clearance/tree/master/app/views) for the default behavior.
+
+To override those **views**, create them in your own `app/views` directory.
+
+There is a shortcut to copy all Clearance views into your app:
+
+    rails generate clearance:views
+
+Overriding the model
+--------------------
+
+If you want to override the **model** behavior, you can include sub-modules of `Clearance::User`:
+
+    extend  Clearance::User::ClassMethods
+    include Clearance::User::Validations
+    include Clearance::User::Callbacks
+
+`ClassMethods` contains the `User.authenticate(email, password)` method.
+
+`Validations` contains validations for email and password.
+
+`Callbacks` contains `ActiveRecord` callbacks downcasing the email and generating a remember token.
+
+Overriding the password strategy
+--------------------------------
+
+By default, Clearance uses SHA1 encryption of the user's password. You can provide your own password strategy by creating a module that conforms to an API of two instance methods:
+
+    def authenticated?
+    end
+
+    def encrypt_password
+    end
+
+See [lib/clearance/password_strategies/sha1.rb](https://github.com/thoughtbot/clearance/blob/master/lib/clearance/password_strategies/sha1.rb) for the default behavior. Also see [lib/clearance/password_strategies/blowfish.rb](https://github.com/thoughtbot/clearance/blob/master/lib/clearance/password_strategies/blowfish.rb) for another password strategy. Switching password strategies will cause your existing users' passwords to not work.
+
+Once you have an API-compliant module, load it with:
+
+    Clearance.configure do |config|
+      config.password_strategy = MyPasswordStrategy
+    end
+
+For example:
+
+    # default
+    config.password_strategy = Clearance::PasswordStrategies::SHA1
+    # Blowfish
+    config.password_strategy = Clearance::PasswordStrategies::Blowfish
+    
 
 Optional Cucumber features
 --------------------------
 
-As your app evolves, you want to know that authentication still works. Our
-opinion is that you should test its integration with your app using
-[Cucumber](http://cukes.info).
+Clearance's Cucumber features are dependent on:
 
-Run the Cucumber generator and Clearance feature generator:
+* Cucumber
+* Capybara
+* RSpec
+* Factory Girl
 
-    script/rails generate cucumber
-    script/rails generate clearance_features
+As your app evolves, you want to know that authentication still works. If you've
+installed [Cucumber](http://cukes.info) into your app:
+
+    rails generate cucumber:install
+
+Then, you can use the Clearance features generator:
+
+    rails generate clearance:features
 
 Edit your Gemfile to include:
 
-    gem 'factory_girl'
+    gem 'factory_girl_rails'
 
-Edit your config/enviroments/cucumber.rb to include the following:
+Edit config/enviroments/test.rb to include the following:
 
-    ActionMailer::Base.default_url_options = { :host => 'localhost:3000' }
+    config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-Then run rake!
+Then run your tests!
 
-Optional Formtastic views
--------------------------
+    rake
 
-We use & recommend [Formtastic](http://github.com/justinfrench/formtastic).
-
-Clearance has another generator to generate Formastic views:
-
-    script/rails generate clearance_views
-
-Its implementation is designed so other view styles (Haml?) can be generated.
-
-Authors
+Testing
 -------
 
-Clearance was extracted out of [Hoptoad](http://hoptoadapp.com). We merged the
-authentication code from two of thoughtbot client Rails apps and have since
-used it each time we need authentication.
+If you want to write Rails functional tests or controller specs with Clearance,
+you'll need to require the  included test helpers and matchers.
 
-The following people have improved the library. Thank you!
+For example, in spec/support/clearance.rb or test/test_helper.rb:
 
-Dan Croak, Mike Burns, Jason Morrison, Joe Ferris, Eugene Bolshakov,
-Nick Quaranto, Josh Nichols, Mike Breen, Marcel Görner, Bence Nagy, Ben Mabey,
-Eloy Duran, Tim Pope, Mihai Anca, Mark Cornick, Shay Arnett, Joshua Clayton,
-Mustafa Ekim, Jon Yurek, Anuj Dutta, Chad Pytel, Ben Orenstein, Bobby Wilson,
-Matthew Ford, Ryan McGeary, Claudio Poli, Joseph Holsten, Peter Haza,
-Ron Newman, and Rich Thornett.
+    require 'clearance/testing'
+
+This will make Clearance::Authentication methods work in your controllers
+during functional tests and provide access to helper methods like:
+
+    sign_in
+    sign_in_as(user)
+    sign_out
+
+And matchers like:
+
+    deny_access
+
+Example:
+
+    context "a visitor" do
+      before { get :show }
+      it     { should deny_access }
+    end
+
+    context "a user" do
+      before do
+        sign_in
+        get :show
+      end
+
+      it { should respond_with(:success) }
+    end
+
+Contributing
+------------
+
+Please see CONTRIBUTING.md for details.
+
+Credits
+-------
+
+![thoughtbot](http://thoughtbot.com/images/tm/logo.png)
+
+Clearance is maintained and funded by [thoughtbot, inc](http://thoughtbot.com/community)
+
+Thank you to all [the contributors](https://github.com/thoughtbot/clearance/contributors)!
+
+The names and logos for thoughtbot are trademarks of thoughtbot, inc.
+
+License
+-------
+
+Clearance is Copyright © 2009-2011 thoughtbot. It is free software, and may be redistributed under the terms specified in the LICENSE file.
