@@ -31,7 +31,7 @@ module Clearance
         Rack::Utils.set_cookie_header!(headers,
                                        REMEMBER_TOKEN_COOKIE,
                                        :value => current_user.remember_token,
-                                       :domain => ".#{request.domain}",
+                                       #:domain => ".#{request.domain}", TODO
                                        :expires => Clearance.configuration.cookie_expiration.call,
                                        :path => "/")
       end
